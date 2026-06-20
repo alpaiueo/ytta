@@ -188,7 +188,7 @@
     <div class="player-container">
         <header class="header">
             <div class="title-row">
-                <h1>Turkey vs Paraguay</h1>
+                <h1 id="stream-title">Memuat tayangan...</h1>
                 <div class="live-badge">
                     <span class="live-dot"></span> Live Now
                 </div>
@@ -204,7 +204,8 @@
 
         <div class="video-wrapper">
             <iframe 
-                src="https://junkieembeds.pages.dev/embed/fox-sports-1" 
+                id="stream-frame"
+                src="" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" 
                 scrolling="no" 
                 allow="autoplay; encrypted-media; picture-in-picture; fullscreen" 
@@ -223,7 +224,7 @@
             </div>
             
             <div class="action-buttons">
-                <button class="btn-action btn-icon-only" title="Refresh" onclick="location.reload()">
+                <button class="btn-action btn-icon-only" title="Refresh" onclick="fetchStreamData()">
                     <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
                 </button>
                 <button class="btn-action">
@@ -239,7 +240,7 @@
     </div>
 
     <script>
-        // 1. Logika Chat Toggle (UI)
+        // 1. Logika Chat Toggle
         const chatBtn = document.getElementById('chatBtn');
         const chatText = document.getElementById('chatText');
         let chatHidden = false;
@@ -253,22 +254,51 @@
         let isPopunderFired = false;
         
         // MASUKKAN LINK SHOPEE AFFILIATE ANDA DI BAWAH INI
-        const shopeeAffiliateLink = "https://s.shopee.co.id/30llUVi3GK";
+        const shopeeAffiliateLink = "LINK_SHOPEE_AFFILIATE_ANDA_DISINI";
 
-        // Fungsi ini akan berjalan saat halaman diklik pertama kali
-        document.addEventListener("click", function(event) {
-            if (!isPopunderFired) {
-                isPopunderFired = true; // Set agar popunder hanya jalan 1x per pengunjung
-                
-                // Membuka link di tab baru
+        document.addEventListener("click", function() {
+            if (!isPopunderFired && shopeeAffiliateLink !== "LINK_SHOPEE_AFFILIATE_ANDA_DISINI") {
+                isPopunderFired = true; 
                 const popunder = window.open(shopeeAffiliateLink, "_blank");
-                
-                // Mencoba mengembalikan fokus ke halaman live streaming (bypass browser modern agak sulit, tapi ini standarnya)
                 if (popunder) {
                     window.focus();
                 }
             }
         });
+
+        // 3. Logika Sinkronisasi Google Sheets (Real-time Panel Admin)
+        const spreadsheetId = "1GxnFfzhnSdMthk2p4nHSNJQ4tcz0wxljNZLCMICs3uk"; 
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=0`;
+
+        function fetchStreamData() {
+            fetch(csvUrl)
+                .then(response => response.text())
+                .then(csvText => {
+                    // Memisahkan data berdasarkan baris baru dan membersihkan tanda kutip bawaan CSV
+                    const lines = csvText.split('\n').map(line => line.replace(/^"|"$/g, '').trim());
+                    
+                    if (lines.length >= 2) {
+                        const title = lines[0];
+                        const embedUrl = lines[1];
+
+                        // Perbarui judul di UI
+                        document.getElementById('stream-title').innerText = title;
+                        
+                        // Perbarui iframe hanya jika URL berubah (mencegah video restart sendiri)
+                        const iframe = document.getElementById('stream-frame');
+                        if (iframe.src !== embedUrl && embedUrl) {
+                            iframe.src = embedUrl;
+                        }
+                    }
+                })
+                .catch(error => console.error("Gagal memuat data panel kontrol:", error));
+        }
+
+        // Ambil data saat halaman pertama kali dibuka
+        fetchStreamData();
+
+        // Otomatis mengecek perubahan di Google Sheets setiap 30 detik tanpa reload halaman keseluruhan
+        setInterval(fetchStreamData, 30000);
     </script>
 </body>
 </html>
