@@ -124,6 +124,11 @@
             background-color: var(--bg-card);
         }
 
+        .footer-left {
+            display: flex;
+            align-items: center;
+        }
+
         .source-selector {
             display: flex;
             align-items: center;
@@ -214,13 +219,17 @@
         </div>
 
         <footer class="footer">
-            <div class="source-selector">
-                <label>Source:</label>
-                <select>
-                    <option value="fs1">FS1</option>
-                    <option value="fs2">FS2</option>
-                    <option value="espn">ESPN</option>
-                </select>
+            <div class="footer-left">
+                <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fytta-lake.vercel.app&count_bg=%23FF4D4D&title_bg=%23232734&title=VISITORS&edge_flat=true" alt="Visitor Count" style="margin-right: 15px; border-radius: 4px; height: 20px;">
+                
+                <div class="source-selector">
+                    <label>Source:</label>
+                    <select>
+                        <option value="fs1">FS1</option>
+                        <option value="fs2">FS2</option>
+                        <option value="espn">ESPN</option>
+                    </select>
+                </div>
             </div>
             
             <div class="action-buttons">
@@ -253,8 +262,8 @@
         // 2. Logika Popunder Shopee Affiliate
         let isPopunderFired = false;
         
-        // MASUKKAN LINK SHOPEE AFFILIATE ANDA DI BAWAH INI
-        const shopeeAffiliateLink = "LINK_SHOPEE_AFFILIATE_ANDA_DISINI";
+        // GANTI TEKS DI BAWAH INI DENGAN LINK SHOPEE AFFILIATE ANDA
+        const shopeeAffiliateLink = "https://s.shopee.co.id/3qKscZjs2g";
 
         document.addEventListener("click", function() {
             if (!isPopunderFired && shopeeAffiliateLink !== "LINK_SHOPEE_AFFILIATE_ANDA_DISINI") {
@@ -266,7 +275,7 @@
             }
         });
 
-        // 3. Logika Sinkronisasi Google Sheets (Real-time Panel Admin)
+        // 3. Logika Sinkronisasi Google Sheets Panel Admin
         const spreadsheetId = "1GxnFfzhnSdMthk2p4nHSNJQ4tcz0wxljNZLCMICs3uk"; 
         const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=0`;
 
@@ -274,17 +283,14 @@
             fetch(csvUrl)
                 .then(response => response.text())
                 .then(csvText => {
-                    // Memisahkan data berdasarkan baris baru dan membersihkan tanda kutip bawaan CSV
                     const lines = csvText.split('\n').map(line => line.replace(/^"|"$/g, '').trim());
                     
                     if (lines.length >= 2) {
                         const title = lines[0];
                         const embedUrl = lines[1];
 
-                        // Perbarui judul di UI
                         document.getElementById('stream-title').innerText = title;
                         
-                        // Perbarui iframe hanya jika URL berubah (mencegah video restart sendiri)
                         const iframe = document.getElementById('stream-frame');
                         if (iframe.src !== embedUrl && embedUrl) {
                             iframe.src = embedUrl;
@@ -294,10 +300,10 @@
                 .catch(error => console.error("Gagal memuat data panel kontrol:", error));
         }
 
-        // Ambil data saat halaman pertama kali dibuka
+        // Ambil data pertama kali saat halaman dimuat
         fetchStreamData();
 
-        // Otomatis mengecek perubahan di Google Sheets setiap 30 detik tanpa reload halaman keseluruhan
+        // Cek pembaruan di Google Sheets otomatis setiap 30 detik tanpa reload halaman
         setInterval(fetchStreamData, 30000);
     </script>
 </body>
