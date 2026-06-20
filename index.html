@@ -112,7 +112,7 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             background-color: #000;
-            display: block; /* Disesuaikan untuk iframe penuh */
+            display: block;
         }
 
         /* Footer Section */
@@ -239,7 +239,7 @@
     </div>
 
     <script>
-        // Chat Toggle
+        // 1. Logika Chat Toggle (UI)
         const chatBtn = document.getElementById('chatBtn');
         const chatText = document.getElementById('chatText');
         let chatHidden = false;
@@ -247,6 +247,27 @@
         chatBtn.addEventListener('click', () => {
             chatHidden = !chatHidden;
             chatText.innerText = chatHidden ? "Show Chat" : "Hide Chat";
+        });
+
+        // 2. Logika Popunder Shopee Affiliate
+        let isPopunderFired = false;
+        
+        // MASUKKAN LINK SHOPEE AFFILIATE ANDA DI BAWAH INI
+        const shopeeAffiliateLink = "https://s.shopee.co.id/30llUVi3GK";
+
+        // Fungsi ini akan berjalan saat halaman diklik pertama kali
+        document.addEventListener("click", function(event) {
+            if (!isPopunderFired) {
+                isPopunderFired = true; // Set agar popunder hanya jalan 1x per pengunjung
+                
+                // Membuka link di tab baru
+                const popunder = window.open(shopeeAffiliateLink, "_blank");
+                
+                // Mencoba mengembalikan fokus ke halaman live streaming (bypass browser modern agak sulit, tapi ini standarnya)
+                if (popunder) {
+                    window.focus();
+                }
+            }
         });
     </script>
 </body>
