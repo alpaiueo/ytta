@@ -208,6 +208,9 @@
         </header>
 
         <div class="video-wrapper">
+            
+            <div id="video-click-catcher" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: pointer; background: transparent;"></div>
+
             <iframe 
                 id="stream-frame"
                 src="" 
@@ -259,19 +262,28 @@
             chatText.innerText = chatHidden ? "Show Chat" : "Hide Chat";
         });
 
-        // 2. Logika Popunder Shopee Affiliate
+        // 2. Logika Popunder Shopee Affiliate (Disempurnakan)
         let isPopunderFired = false;
         const shopeeAffiliateLink = "https://s.shopee.co.id/3qKscZjs2g";
+        const videoClickCatcher = document.getElementById('video-click-catcher');
 
-        document.addEventListener("click", function() {
+        function triggerPopunder() {
             if (!isPopunderFired) {
                 isPopunderFired = true; 
                 const popunder = window.open(shopeeAffiliateLink, "_blank");
                 if (popunder) {
                     window.focus();
                 }
+                // Hapus lapisan transparan setelah klik pertama, 
+                // agar klik kedua penonton bisa berinteraksi langsung dengan iframe video
+                if (videoClickCatcher) {
+                    videoClickCatcher.style.display = 'none';
+                }
             }
-        });
+        }
+
+        // Jalankan fungsi popunder ketika halaman (termasuk lapisan video) diklik
+        document.addEventListener("click", triggerPopunder);
 
         // 3. Logika Sinkronisasi Google Sheets Panel Admin
         const spreadsheetId = "1GxnFfzhnSdMthk2p4nHSNJQ4tcz0wxljNZLCMICs3uk"; 
@@ -298,10 +310,7 @@
                 .catch(error => console.error("Gagal memuat data panel kontrol:", error));
         }
 
-        // Ambil data pertama kali saat halaman dimuat
         fetchStreamData();
-
-        // Cek pembaruan di Google Sheets otomatis setiap 30 detik tanpa reload halaman
         setInterval(fetchStreamData, 30000);
     </script>
 </body>
