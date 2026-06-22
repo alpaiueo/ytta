@@ -261,12 +261,10 @@
 
         // 2. Logika Popunder Shopee Affiliate
         let isPopunderFired = false;
-        
-        // GANTI TEKS DI BAWAH INI DENGAN LINK SHOPEE AFFILIATE ANDA
         const shopeeAffiliateLink = "https://s.shopee.co.id/3qKscZjs2g";
 
         document.addEventListener("click", function() {
-            if (!isPopunderFired && shopeeAffiliateLink !== "https://s.shopee.co.id/3qKscZjs2g") {
+            if (!isPopunderFired) {
                 isPopunderFired = true; 
                 const popunder = window.open(shopeeAffiliateLink, "_blank");
                 if (popunder) {
