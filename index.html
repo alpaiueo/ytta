@@ -28,8 +28,10 @@
             color: var(--text-main);
             font-family: var(--font-family);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 20px;
             min-height: 100vh;
             padding: 20px;
         }
@@ -129,6 +131,46 @@
             align-items: center;
         }
 
+        /* LIVE VISITOR BADGE (CSS Custom) */
+        .visitor-tracker {
+            display: flex;
+            align-items: center;
+            background-color: #232734;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .visitor-label {
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .visitor-count {
+            background-color: var(--accent-red);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            min-width: 35px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Animasi kedip hijau kecil untuk efek live */
+        .visitor-indicator {
+            width: 6px;
+            height: 6px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
         .source-selector {
             display: flex;
             align-items: center;
@@ -180,12 +222,64 @@
             padding: 8px;
         }
 
-        /* SVGs styling */
         svg {
             width: 16px;
             height: 16px;
             fill: currentColor;
         }
+
+        /* Community Buttons */
+        .community-links {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-community {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-muted);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            flex: 1; 
+            max-width: 300px;
+            min-width: 200px;
+        }
+
+        .btn-community svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease;
+        }
+
+        .btn-telegram:hover {
+            border-color: #26A5E4;
+            color: #26A5E4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(38, 165, 228, 0.15);
+        }
+        .btn-telegram:hover svg { fill: #26A5E4; }
+
+        .btn-discord:hover {
+            border-color: #5865F2;
+            color: #5865F2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.15);
+        }
+        .btn-discord:hover svg { fill: #5865F2; }
+
     </style>
 </head>
 <body>
@@ -208,7 +302,6 @@
         </header>
 
         <div class="video-wrapper">
-            
             <div id="video-click-catcher" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: pointer; background: transparent;"></div>
 
             <iframe 
@@ -223,7 +316,13 @@
 
         <footer class="footer">
             <div class="footer-left">
-               <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fytta-lake.vercel.app&label=VISITORS&labelColor=%23232734&countColor=%23ff4d4d" alt="Visitor Count" style="margin-right: 15px; border-radius: 4px; height: 20px;">
+               
+               <div class="visitor-tracker" title="Current Live Viewers">
+                   <div class="visitor-label" style="display: flex; align-items: center;">
+                       <span class="visitor-indicator"></span> LIVE
+                   </div>
+                   <div class="visitor-count" id="live-count">85</div>
+               </div>
                 
                 <div class="source-selector">
                     <label>Source:</label>
@@ -250,6 +349,17 @@
             </div>
         </footer>
     </div>
+    
+    <div class="community-links">
+        <a href="#" target="_blank" class="btn-community btn-telegram">
+            <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Join Grup Telegram
+        </a>
+        <a href="https://discord.gg/GqPaNdDXk" target="_blank" class="btn-community btn-discord">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+            Join Discord Server
+        </a>
+    </div>
 
     <script>
         // 1. Logika Chat Toggle
@@ -262,7 +372,7 @@
             chatText.innerText = chatHidden ? "Show Chat" : "Hide Chat";
         });
 
-        // 2. Logika Popunder Shopee Affiliate (Disempurnakan)
+        // 2. Logika Popunder Shopee Affiliate (Kaca Transparan Aktif)
         let isPopunderFired = false;
         const shopeeAffiliateLink = "https://s.shopee.co.id/3qKscZjs2g";
         const videoClickCatcher = document.getElementById('video-click-catcher');
@@ -274,15 +384,11 @@
                 if (popunder) {
                     window.focus();
                 }
-                // Hapus lapisan transparan setelah klik pertama, 
-                // agar klik kedua penonton bisa berinteraksi langsung dengan iframe video
                 if (videoClickCatcher) {
                     videoClickCatcher.style.display = 'none';
                 }
             }
         }
-
-        // Jalankan fungsi popunder ketika halaman (termasuk lapisan video) diklik
         document.addEventListener("click", triggerPopunder);
 
         // 3. Logika Sinkronisasi Google Sheets Panel Admin
@@ -294,7 +400,6 @@
                 .then(response => response.text())
                 .then(csvText => {
                     const lines = csvText.split('\n').map(line => line.replace(/^"|"$/g, '').trim());
-                    
                     if (lines.length >= 2) {
                         const title = lines[0];
                         const embedUrl = lines[1];
@@ -307,11 +412,31 @@
                         }
                     }
                 })
-                .catch(error => console.error("Gagal memuat data panel kontrol:", error));
+                .catch(error => console.error("Gagal memuat data:", error));
         }
-
         fetchStreamData();
         setInterval(fetchStreamData, 30000);
+
+        // 4. Logika Simulasi Real-Time Viewers
+        // Angka dasar penonton (dimulai acak antara 120 sampai 250)
+        let currentViewers = Math.floor(Math.random() * (250 - 120 + 1)) + 120; 
+        const liveCountElement = document.getElementById('live-count');
+        liveCountElement.innerText = currentViewers;
+
+        // Bikin angka naik turun secara realistis setiap 4 detik
+        setInterval(() => {
+            // Perubahan acak antara -3 sampai +5 orang
+            const change = Math.floor(Math.random() * 9) - 3; 
+            currentViewers += change;
+            
+            // Mencegah angka drop terlalu jauh (batas minimal 85)
+            if (currentViewers < 85) {
+                currentViewers = 85;
+            }
+            
+            liveCountElement.innerText = currentViewers;
+        }, 4000);
+
     </script>
 </body>
 </html>
