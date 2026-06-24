@@ -36,7 +36,6 @@
             padding: 20px;
         }
 
-        /* Main Container */
         .player-container {
             width: 100%;
             max-width: 900px;
@@ -47,7 +46,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Header Section */
         .header {
             padding: 20px;
             border-bottom: 1px solid var(--border-color);
@@ -108,7 +106,6 @@
             gap: 6px;
         }
 
-        /* Video Area */
         .video-wrapper {
             position: relative;
             width: 100%;
@@ -117,28 +114,29 @@
             display: block;
         }
 
-        /* Footer Section */
         .footer {
             padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: var(--bg-card);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .footer-left {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        /* LIVE VISITOR BADGE (CSS Custom) */
         .visitor-tracker {
             display: flex;
             align-items: center;
             background-color: #232734;
             border-radius: 4px;
             overflow: hidden;
-            margin-right: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
@@ -161,7 +159,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Animasi kedip hijau kecil untuk efek live */
         .visitor-indicator {
             width: 6px;
             height: 6px;
@@ -186,7 +183,7 @@
             padding: 8px 12px;
             border-radius: 6px;
             outline: none;
-            width: 150px;
+            width: 130px;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
@@ -228,7 +225,6 @@
             fill: currentColor;
         }
 
-        /* Community Buttons */
         .community-links {
             display: flex;
             gap: 16px;
@@ -316,7 +312,6 @@
 
         <footer class="footer">
             <div class="footer-left">
-               
                <div class="visitor-tracker" title="Current Live Viewers">
                    <div class="visitor-label" style="display: flex; align-items: center;">
                        <span class="visitor-indicator"></span> LIVE
@@ -325,11 +320,12 @@
                </div>
                 
                 <div class="source-selector">
-                    <label>Source:</label>
-                    <select>
-                        <option value="fs1">FS1</option>
-                        <option value="fs2">FS2</option>
-                        <option value="espn">ESPN</option>
+                    <label>Match:</label>
+                    <select id="matchSelector" onchange="changeMatch(this.value)">
+                        <option value="1">Match 1</option>
+                        <option value="2">Match 2</option>
+                        <option value="3">Match 3</option>
+                        <option value="4">Match 4</option>
                     </select>
                 </div>
             </div>
@@ -341,10 +337,6 @@
                 <button class="btn-action">
                     <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
                     Theater
-                </button>
-                <button class="btn-action" id="chatBtn">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-                    <span id="chatText">Hide Chat</span>
                 </button>
             </div>
         </footer>
@@ -362,17 +354,20 @@
     </div>
 
     <script>
-        // 1. Logika Chat Toggle
-        const chatBtn = document.getElementById('chatBtn');
-        const chatText = document.getElementById('chatText');
-        let chatHidden = false;
+        // MENDAPATKAN CHANNEL DARI URL PARAMETER (Default = 1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentCh = parseInt(urlParams.get('ch')) || 1;
 
-        chatBtn.addEventListener('click', () => {
-            chatHidden = !chatHidden;
-            chatText.innerText = chatHidden ? "Show Chat" : "Hide Chat";
-        });
+        // SET DROPDOWN KE CHANNEL YANG SEDANG AKTIF
+        const matchSelector = document.getElementById('matchSelector');
+        if(matchSelector) matchSelector.value = currentCh;
 
-        // 2. Logika Popunder Shopee Affiliate (Kaca Transparan Aktif)
+        // FUNGSI SAAT DROPDOWN DIPILIH (Pindah Halaman)
+        function changeMatch(ch) {
+            window.location.href = `?ch=${ch}`;
+        }
+
+        // Logika Popunder Shopee Affiliate
         let isPopunderFired = false;
         const shopeeAffiliateLink = "https://s.shopee.co.id/3qKscZjs2g";
         const videoClickCatcher = document.getElementById('video-click-catcher');
@@ -391,7 +386,7 @@
         }
         document.addEventListener("click", triggerPopunder);
 
-        // 3. Logika Sinkronisasi Google Sheets Panel Admin
+        // Logika Sinkronisasi Google Sheets Multi-Match
         const spreadsheetId = "1GxnFfzhnSdMthk2p4nHSNJQ4tcz0wxljNZLCMICs3uk"; 
         const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=0`;
 
@@ -400,9 +395,17 @@
                 .then(response => response.text())
                 .then(csvText => {
                     const lines = csvText.split('\n').map(line => line.replace(/^"|"$/g, '').trim());
-                    if (lines.length >= 2) {
-                        const title = lines[0];
-                        const embedUrl = lines[1];
+                    
+                    // Kalkulasi indeks baris berdasarkan Channel
+                    // Ch 1 -> Baris 1 & 2 (index 0 & 1)
+                    // Ch 2 -> Baris 3 & 4 (index 2 & 3)
+                    const titleIndex = (currentCh - 1) * 2;
+                    const urlIndex = titleIndex + 1;
+
+                    // Cek apakah data untuk channel ini tersedia di Google Sheets
+                    if (lines.length > urlIndex) {
+                        const title = lines[titleIndex];
+                        const embedUrl = lines[urlIndex];
 
                         document.getElementById('stream-title').innerText = title;
                         
@@ -410,6 +413,9 @@
                         if (iframe.src !== embedUrl && embedUrl) {
                             iframe.src = embedUrl;
                         }
+                    } else {
+                        // Jika baris kosong di Google Sheets
+                        document.getElementById('stream-title').innerText = "Match belum tersedia";
                     }
                 })
                 .catch(error => console.error("Gagal memuat data:", error));
@@ -417,23 +423,15 @@
         fetchStreamData();
         setInterval(fetchStreamData, 30000);
 
-        // 4. Logika Simulasi Real-Time Viewers
-        // Angka dasar penonton (dimulai acak antara 120 sampai 250)
+        // Logika Simulasi Real-Time Viewers
         let currentViewers = Math.floor(Math.random() * (250 - 120 + 1)) + 120; 
         const liveCountElement = document.getElementById('live-count');
         liveCountElement.innerText = currentViewers;
 
-        // Bikin angka naik turun secara realistis setiap 4 detik
         setInterval(() => {
-            // Perubahan acak antara -3 sampai +5 orang
             const change = Math.floor(Math.random() * 9) - 3; 
             currentViewers += change;
-            
-            // Mencegah angka drop terlalu jauh (batas minimal 85)
-            if (currentViewers < 85) {
-                currentViewers = 85;
-            }
-            
+            if (currentViewers < 85) currentViewers = 85;
             liveCountElement.innerText = currentViewers;
         }, 4000);
 
