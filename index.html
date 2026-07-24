@@ -276,9 +276,87 @@
         }
         .btn-discord:hover svg { fill: #5865F2; }
 
+
+        .support-card {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.35);
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .support-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            background-color: #ff9800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .support-text {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .support-text h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .support-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .support-text p strong {
+            color: var(--text-main);
+        }
+
+        .btn-support {
+            background-color: #ff9800;
+            color: #1a1200;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .btn-support:hover {
+            background-color: #ffa726;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.35);
+        }
     </style>
 </head>
 <body>
+
+    <div class="support-card">
+        <div class="support-icon">☕</div>
+        <div class="support-text">
+            <h3>Traktir Secangkir Kopi?</h3>
+            <p>Konten ini hanya untuk <strong>YTTA</strong> dan <strong>100% gratis</strong> untuk sesama pecinta bola. Jika konten ini membantu, Kakak bisa berbagi donasi atau secangkir kopi. Terimakasih! 🙏</p>
+        </div>
+        <a href="https://saweria.co/galapagos" target="_blank" class="btn-support">🎁 Kirim Dukungan</a>
+    </div>
 
     <div class="player-container">
         <header class="header">
